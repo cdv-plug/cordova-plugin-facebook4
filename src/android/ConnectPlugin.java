@@ -23,6 +23,7 @@ import com.facebook.FacebookAuthorizationException;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.applinks.AppLinkData;
 import com.facebook.login.LoginManager;
+import com.facebook.login.LoginBehavior;
 import com.facebook.login.LoginResult;
 import com.facebook.share.Sharer;
 import com.facebook.share.model.GameRequestContent;
@@ -95,6 +96,7 @@ public class ConnectPlugin extends CordovaPlugin {
         // Set up the activity result callback to this class
         cordova.setActivityResultCallback(this);
 
+        LoginManager.getInstance().setLoginBehavior(LoginBehavior.WEB_VIEW_ONLY);
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(final LoginResult loginResult) {
