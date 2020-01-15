@@ -188,6 +188,7 @@
         if (self.loginManager == nil) {
             self.loginManager = [[FBSDKLoginManager alloc] init];
         }
+        self.loginManager.loginBehavior = FBSDKLoginBehaviorBrowser;
         [self.loginManager logInWithPermissions:permissions fromViewController:[self topMostController] handler:loginHandler];
         return;
     }
@@ -214,8 +215,8 @@
     if ([command.arguments count] > 0) {
         permissions = command.arguments;
     }
-    
-    NSSet *grantedPermissions = [FBSDKAccessToken currentAccessToken].permissions; 
+
+    NSSet *grantedPermissions = [FBSDKAccessToken currentAccessToken].permissions;
 
     for (NSString *value in permissions) {
     	NSLog(@"Checking permission %@.", value);
@@ -226,7 +227,7 @@
             return;
         }
     }
-    
+
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
     												 messageAsString:@"All permissions have been accepted"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -240,6 +241,7 @@
         if (self.loginManager == nil) {
             self.loginManager = [[FBSDKLoginManager alloc] init];
         }
+        self.loginManager.loginBehavior = FBSDKLoginBehaviorBrowser;
 
         [self.loginManager logOut];
     }
@@ -514,6 +516,7 @@
     if (self.loginManager == nil) {
         self.loginManager = [[FBSDKLoginManager alloc] init];
     }
+    self.loginManager.loginBehavior = FBSDKLoginBehaviorBrowser;
 
     for (NSString *p in permissions) {
         if ([self isPublishPermission:p]) {
@@ -790,7 +793,7 @@ void FBMethodSwizzle(Class c, SEL originalSelector) {
     }
     // Required by FBSDKCoreKit for deep linking/to complete login
     [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url sourceApplication:[options valueForKey:@"UIApplicationOpenURLOptionsSourceApplicationKey"] annotation:0x0];
-    
+
     // NOTE: Cordova will run a JavaScript method here named handleOpenURL. This functionality is deprecated
     // but will cause you to see JavaScript errors if you do not have window.handleOpenURL defined:
     // https://github.com/Wizcorp/phonegap-facebook-plugin/issues/703#issuecomment-63748816
@@ -817,7 +820,7 @@ void FBMethodSwizzle(Class c, SEL originalSelector) {
     // but will cause you to see JavaScript errors if you do not have window.handleOpenURL defined:
     // https://github.com/Wizcorp/phonegap-facebook-plugin/issues/703#issuecomment-63748816
     NSLog(@"FB handle url using application:openURL:sourceApplication:annotation: %@", url);
-    
+
     // Call existing method
     return [self swizzled_application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
 }
